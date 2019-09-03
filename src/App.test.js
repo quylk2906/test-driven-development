@@ -1,8 +1,7 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import { shallow } from 'enzyme';
 import App from './App';
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+import { getComponentByAttr } from './testUtils';
 
 const setup = (props = {}, state = null) => {
   const wrapper = shallow(<App {...props} />);
@@ -11,9 +10,6 @@ const setup = (props = {}, state = null) => {
   }
   return wrapper;
 };
-
-const getComponentByAttr = (wrapper, attr) =>
-  wrapper.find(`[data-test="${attr}"]`);
 
 test('renders without crashing', () => {
   const wrapper = setup();

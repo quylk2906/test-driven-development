@@ -1,34 +1,38 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import { shallow } from 'enzyme';
 import Congrats from './Congrats';
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+import { getComponentByAttr, checkProps } from './testUtils';
+
+const defaultProps = { success: false };
 
 const setup = (props = {}, state = null) => {
-  const wrapper = shallow(<Congrats {...props} />);
+  const initialProps = { ...defaultProps, ...props };
+  const wrapper = shallow(<Congrats {...initialProps} />);
   if (state) {
     wrapper.setState(state);
   }
   return wrapper;
 };
 
-const getComponentByAttr = (wrapper, attr) =>
-  wrapper.find(`[data-test="${attr}"]`);
-
 test('renders without crashing', () => {
-  const wrapper = setup();
-  const appComponent = getComponentByAttr(wrapper, 'grats-component');
+  const wrapper = setup(defaultProps);
+  const appComponent = getComponentByAttr(wrapper, 'congrats-component');
   expect(appComponent.length).toBe(1);
 });
 
 test('renders text when `success` is false', () => {
-  const wrapper = setup({ success: false });
-  const congratComponent = getComponentByAttr(wrapper, 'grats-component');
-  expect(congratComponent.length).toBe(1);
+  const wrapper = setup(defaultProps);
+  const congratComponent = getComponentByAttr(wrapper, 'congrats-component');
+  expect(congratComponent.text()).toBe('');
 });
 
 test('renders text when `success` is true', () => {
   const wrapper = setup({ success: true });
-  const congratComponent = getComponentByAttr(wrapper, 'grats-component');
-  expect(congratComponent.length).toBe(1);
+  const congratComponent = getComponentByAttr(wrapper, 'message-display');
+  expect(congratComponent.text().length).not.toBe(0);
+});
+
+test('do not throw warning with expected props', () => {
+  const expectedProp = { success: true };
+  checkProps(Congrats, expectedProp);
 });
