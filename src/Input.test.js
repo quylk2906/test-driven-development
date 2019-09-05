@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Input from './Input';
+import InputComponent from './Input';
 import { storeFactory, getComponentByAttr } from './testUtils';
 
 const defaultProps = {};
@@ -8,9 +8,10 @@ const defaultProps = {};
 const setup = (initialState = {}) => {
   const initialProps = { ...defaultProps };
   const wrapper = shallow(
-    <Input {...initialProps} store={storeFactory(initialState)} />
-  ).dive();
-
+    <InputComponent {...initialProps} store={storeFactory(initialState)} />
+  )
+    .dive()
+    .dive();
   return wrapper;
 };
 
@@ -22,7 +23,6 @@ describe('Render `Input Component`', () => {
   });
   describe('word has not been guessed', () => {
     test('should render without error', () => {
-      console.log('wrapper :', wrapper);
       const compnent = getComponentByAttr(wrapper, 'component-input');
       expect(compnent.length).toBe(1);
     });
@@ -43,14 +43,21 @@ describe('Update state `Input Component`', () => {
   describe('word has been guessed', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = setup({});
+      wrapper = setup({ success: true });
     });
     test('should render without error', () => {
-      expect(wrapper.length).toBe(1);
+      const compnent = getComponentByAttr(wrapper, 'component-input');
+      expect(compnent.length).toBe(1);
     });
 
-    test('should not render input box', () => {});
+    test('should not render input box', () => {
+      const compnent = getComponentByAttr(wrapper, 'input-box');
+      expect(compnent.length).toBe(0);
+    });
 
-    test('should not render submit button', () => {});
+    test('should not render submit button', () => {
+      const compnent = getComponentByAttr(wrapper, 'submit-button');
+      expect(compnent.length).toBe(0);
+    });
   });
 });

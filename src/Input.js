@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-class Input extends Component {
+class InputComponent extends Component {
   render() {
     const { success } = this.props;
     return (
@@ -21,6 +21,4 @@ const mapStateToProps = state => {
 };
 
 // export default Input
-export default connect(
-  mapStateToProps,
-)(Input);
+export default connect(mapStateToProps)(InputComponent);
