@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getSecretWord } from './actions';
+import Congrats from './Congrats';
+import GuessedWords from './GuessedWords';
+import InputComponent from './Input';
 
-export default class App extends Component {
-  state = {
-    counter: 0
-  };
+export class App extends Component {
+  componentDidMount() {
+    this.props.getSecretWord();
+  }
   render() {
     return (
       <div className="App">
         <header className="App-header" data-test="app-component">
-          <h1 data-test="counter-display">{this.state.counter}</h1>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-test="increment-button"
-          >
-            Learn React
-          </a>
+          <h1>Jotto</h1>
+          <Congrats success={this.props.success}></Congrats>
+          <InputComponent></InputComponent>
+          <GuessedWords guessedWords={this.props.guessedWords}></GuessedWords>
         </header>
       </div>
     );
   }
 }
+const mapStateToProps = ({ secretWord, guessedWords, success }) => {
+  return { secretWord, guessedWords, success };
+};
+
+export default connect(
+  mapStateToProps,
+  { getSecretWord }
+)(App);
